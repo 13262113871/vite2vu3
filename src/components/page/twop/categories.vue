@@ -1,12 +1,16 @@
 <template>
   <div>
-      222222222222222222
+      asd
   </div>
 </template>
 
 <script>
 import { reactive, onMounted, toRefs } from "vue";
 export default {
+   name:"categories",
+   props:{
+
+     },
   setup() {
     // 页面加载
     onMounted(() => {});
