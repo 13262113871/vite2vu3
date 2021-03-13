@@ -193,6 +193,11 @@ dayjs@1.x:
   resolved "https://registry.npm.taobao.org/dayjs/download/dayjs-1.10.4.tgz#8e544a9b8683f61783f570980a8a80eaf54ab1e2"
   integrity sha1-jlRKm4aD9heD9XCYCoqA6vVKseI=
 
+default-passive-events@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.npm.taobao.org/default-passive-events/download/default-passive-events-2.0.0.tgz#79b1aa67becbaab38b718469b5480fef92eda649"
+  integrity sha1-ebGqZ77LqrOLcYRptUgP75Ltpkk=
+
 element-plus@^1.0.2-beta.33:
   version "1.0.2-beta.33"
   resolved "https://registry.npm.taobao.org/element-plus/download/element-plus-1.0.2-beta.33.tgz#0e924c8872dbc14e916ed5d6452d9799b04d4c60"
