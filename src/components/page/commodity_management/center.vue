@@ -48,11 +48,19 @@
         <!-- 操作 -->
         <el-table-column prop="address" label="操作">
           <template #default="scope">
-            <el-button type="primary" icon="el-icon-edit" size="small"
-              >搜索</el-button
+            <el-button
+              type="primary"
+              icon="el-icon-edit"
+              size="small"
+              @click="bianFen(scope.row.cat_id)"
+              >编辑</el-button
             >
-            <el-button type="danger" icon="el-icon-delete" size="small"
-              >搜索</el-button
+            <el-button
+              type="danger"
+              icon="el-icon-delete"
+              size="small"
+              @click="removeFen(scope.row.cat_id)"
+              >删除</el-button
             >
           </template>
         </el-table-column>
@@ -100,11 +108,29 @@
         </span>
       </template>
     </el-dialog>
+
+    <!-- 修改数据 -->
+    <el-dialog title="添加用户" v-model="xiuVisible" width="60%">
+      <!-- 数据列表 -->
+      <el-form label-width="70px" :model="xiuAlign">
+        <el-form-item label="修改的值" prop="username">
+          <el-input v-model="xiuAlign.cat_name"></el-input>
+        </el-form-item>
+      </el-form>
+
+      <!-- 添加按钮 -->
+      <template #footer>
+        <span>
+          <el-button @click="xiuVisible = false">取 消</el-button>
+          <el-button type="primary" @click="xiuUser">确 定</el-button>
+        </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { reactive, onMounted, toRefs ,ref} from "vue";
+import { reactive, onMounted, toRefs, ref } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { request } from "netWork/axios";
 export default {
@@ -184,9 +210,11 @@ export default {
         method: "post",
         data: stateT.fenAdd,
       }).then((res) => {
-        console.log(res);
+        if (res.meta.status == !201) return ElMessage.error("分类添加失败");
+        ElMessage.success(res.meta.msg);
+        getList();
+        stateT.fenisShow = false;
       });
-      stateT.fenisShow = false;
     };
     // 取消
     const fenisClose = () => {
@@ -209,7 +237,7 @@ export default {
     // 添加分类验证规则
     let rules = {
       cat_name: [
-        { required: true, message: "分类名称不能为空", trigger: "blur" },
+        { required: true, ElMessage: "分类名称不能为空", trigger: "blur" },
       ],
     };
 
@@ -225,6 +253,71 @@ export default {
       }
     };
 
+    // 修改数据
+    const stateS = reactive({
+      // 修改数据
+      xiuVisible: false,
+      xiuAlign: {},
+      xiuId: "",
+      roleId: "",
+    });
+
+    // 修改
+    // 查询
+    const bianFen = (id) => {
+      stateS.roleId = id;
+      request({
+        url: `/categories/${id}`,
+      }).then((res) => {
+        if (res.meta.status !== 200) return ElMessage.error(res.meta.msg);
+        ElMessage.success(res.meta.msg);
+        stateS.xiuAlign = res.data;
+        stateS.xiuVisible = true;
+      });
+    };
+
+    // 查询到id后修改
+    const xiuUser = () => {
+      console.log(stateS.roleId);
+      console.log(stateS.xiuAlign.cat_name);
+      request({
+        url: `/categories/${stateS.roleId}`,
+        method: "put",
+        data: stateS.xiuAlign,
+      }).then((res) => {
+        if (res.meta.status !== 200) return ElMessage.error(res.meta.msg);
+        ElMessage.success(res.meta.msg);
+        getList();
+        stateS.xiuVisible = false;
+      });
+    };
+
+    // 删除
+    const removeFen = (id) => {
+      console.log(id);
+      ElMessageBox.confirm("是否确认删除", "确认信息", {
+        distinguishCancelAndClose: true,
+        confirmButtonText: "确认删除",
+        cancelButtonText: "我在想想",
+      }).then(() => {
+          request({
+            url: `/categories/${id}`,
+            method: "delete",
+          }).then((res) => {
+            if (res.meta.status !== 200) return ElMessage.error(res.meta.msg);
+            ElMessage.success(res.meta.msg);
+            getList();
+          });
+        })
+        .catch((action) => {
+          ElMessage({
+            type: "info",
+            ElMessage:
+              action === "cancel" ? "放弃保存并离开页面" : "停留在当前页面",
+          });
+        });
+    };
+
     // 页面加载
     onMounted(() => {
       getList();
@@ -233,6 +326,7 @@ export default {
     return {
       ...toRefs(state),
       ...toRefs(stateT),
+      ...toRefs(stateS),
       getList,
       handleSizeChange,
       handleCurrentChange,
@@ -242,6 +336,9 @@ export default {
       fenisClose,
       handleChange,
       closeFen,
+      bianFen,
+      removeFen,
+      xiuUser,
     };
   },
 };
