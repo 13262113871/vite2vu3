@@ -28,7 +28,6 @@
       title="添加用户"
       v-model="dialogVisible"
       width="60%"
-      :before-close="handleClose"
       @close='close'
       >
 
@@ -62,7 +61,6 @@
       title="添加用户"
       v-model="xiuVisible"
       width="60%"
-      :before-close="handleClose"
       >
 
       <!-- 数据列表 -->
@@ -148,7 +146,7 @@ export default {
         pagenum: 1,
         pagesize: 10,
       },
-      total:'',
+      total:null,
       userList: [],
 
 
@@ -225,7 +223,6 @@ export default {
         method:'post',
         data: state.formLabelAlign
       }).then((res) => {
-        console.log(res);
         if(res.meta.status !== 201) return Message.error(res.meta.msg)
         Message.success(res.meta.msg)
         state.dialogVisible = false
@@ -238,7 +235,6 @@ export default {
       request({
         url: `/users/${id}`,
       }).then((res) => {
-        console.log(res);
         if(res.meta.status !== 200) return Message.error(res.meta.msg)
         Message.success(res.meta.msg)
         state.xiuAlign = res.data
@@ -252,7 +248,6 @@ export default {
         method:"put",
         data:state.xiuAlign
       }).then((res) => {
-        console.log(res);
         if(res.meta.status !== 200) return Message.error(res.meta.msg)
         Message.success(res.meta.msg)
         getList();
@@ -290,13 +285,10 @@ export default {
   }
   // 修改用户权限
   const quanUser = (id) =>{
-
-    console.log(id);
       request({
         url: `/users/${id}role`,
         method:'put'
       }).then((res) => {
-        console.log(res);
         if(res.meta.status !== 200) return Message.error(res.meta.msg)
         Message.success(res.meta.msg)
         getList();

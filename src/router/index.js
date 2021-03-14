@@ -10,6 +10,7 @@ const Params = () => import("components/page/twop/params.vue");
 const Categories = () => import("components/page/twop/categories.vue");
 const Orders = () => import("components/page/twop/orders.vue");
 const Reports = () => import("components/page/twop/reports.vue");
+const Hom = () =>import("../components/page/hom.vue")
 
 const routes = [
   { path: "/", name: "Lgin", component: Login },
@@ -17,9 +18,10 @@ const routes = [
   {
     path: "/home",
     name: "Home",
-    redirect:'/home/users',
+    redirect:'/home/hom',
     component: Home,
     children: [
+      {path:"hom",name:Hom,component:Hom},
       { path: "users", name: "Users", component: Users },
       { path: "roles", name: "Roles", component: Roles },
       { path: "rights", name: "Rights", component: Rights },
