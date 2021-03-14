@@ -1,24 +1,21 @@
 <template>
   <div>
-    jjjjjjjjjjjjjjjj
+      <h1>Welcome!</h1>
   </div>
 </template>
 
 <script>
 import { reactive, onMounted, toRefs } from "vue";
-
-
 export default {
-  components:{
-        
-  },
+   name:"",
+   props:{
+
+     },
   setup() {
     // 页面加载
     onMounted(() => {});
     //数据
-    const state = reactive({
-          
-    });
+    const state = reactive({});
 
     return {
       ...toRefs(state),
